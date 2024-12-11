@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker</title>
+    <style>
+#cookieImage {
+    position: relative;
+    z-index: 1;
+}
+
+#mejoras {
+    position: relative;
+    z-index: 1;
+}
+
+#cargar {
+    position: relative;
+    z-index: 1;
+}
+
+#stats {
+    position: relative;
+    z-index: 1;
+}
+
+/* Galletas pequeñas */
+.galleta {
+    z-index: 0;
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden; /* Asegura que la página no tenga scroll innecesario */
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .clicker-section {
+            width: 67%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #174e92;
+            padding: 20px;
+            position: relative;
+        }
+
+        .extra-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .extra-buttons button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #counter {
+            font-size: 78px;
+            margin: 50px 0;
+            color: white;
+			z-index: 1;
+        }
+
+        #cookieImage {
+            cursor: pointer;
+            width: 350px;
+            height: auto;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        #cookieImage:hover {
+            transform: scale(1.1);
+        }
+
+        .button-section {
+    width: 33%;
+    background-color: #3a74b2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Cambiar para asegurar que los botones inicien desde arriba */
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Asegura un scroll si el contenido excede */
+    max-height: 100%; /* Se asegura de no limitar artificialmente el tamaño */
+    gap: 10px; /* Espaciado entre botones */
+}
+
+        .button-section button {
+            width: 90%;
+            padding: 15px; /* Ajusta este valor para disminuir el tamaño */
+    margin: 5px 0; /* Espaciado más uniforme */
+    font-size: 18px; /* Reduce ligeramente si es necesario */
+            cursor: pointer;
+            background-color: #856039;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button-section button:hover {
+            background-color: #755633;
+            transform: scale(1.05);
+        }
+
+        #estadisticas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+			z-index: 2;
+        }
+
+        #bannerII {
+            background-color: #2d477b;
+            width: 500px;
+            height: auto;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        #bannerII p {
+            margin: 15px 0;
+            font-size: 28px;
+            color: white;
+        }
+
+        #closeButtonII {
+            padding: 10px 20px;
+            background-color: #856039;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+		
+#mejorasOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+#mejorasBanner {
+    background-color: #2d477b;
+    width: 500px;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+#mejorasBanner p {
+    margin: 15px 0;
+    font-size: 18px;
+    color: white;
+}
+
+#closeButtonMejoras {
+    padding: 10px 20px;
+    background-color: #856039;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.buttonToken {
+	background-color: #54b9d9;
+    width: 450px;
+	height: 50px;
+	margin: 5px 0;
+	border: none;
+    border-radius: 5px;
+    text-align: center;
+	font-size: 15px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sección principal del clicker -->
+        <div class="clicker-section">
+            <div class="extra-buttons">
+				<button onclick="mostrarMejoras()" id="mejoras">Mejoras</button>
+                <button onclick="mostrarEstadisticas()" id="stats">Estadísticas</button>
+            </div>
+            <div id="counter">0</div>
+            <img id="cookieImage" src="galleta.png" alt="Galleta" onclick="incrementarContador()">
+        </div>
+
+        <!-- Sección de botones de mejora -->
+        <div class="button-section">
+            <button id="boton1">Horno pequeño: 50 clicks</button>
+            <button id="boton2">Mezclador: 400 clicks</button>
+            <button id="boton3">Horno industrial: 1.5K clicks</button>
+            <button id="boton4">Fábrica de galletas: 5.5K clicks</button>
+            <button id="boton5">Imperio galletero: 10K clicks</button>
+            <button id="boton6">Fábrica automatizada: 20K clicks</button>
+            <button id="boton7">Red de distribución: 45K clicks</button>
+            <button id="boton8">Generador de producción: 80K clicks</button>
+            <button id="boton9">Máquina de gran escala: 150K clicks</button>
+            <button id="boton10">Renacimiento: 10M clicks</button>
+			<button id="boton11" onClick="masUnAR()">Autorenacimiento: 70 Renacimientos + 10B clicks</button>
+        </div>
+    </div>
+
+    <!-- Overlay para las estadísticas -->
+    <div id="estadisticas">
+        <div id="bannerII">
+            <p>Clicks por Click: <span id="clicksPorClick">1</span></p>
+            <p>Clicks por Segundo: <span id="clicksPorSegundo">0</span></p>
+            <p>Multiplicador actual: <span id="multiplicador">1</span></p>
+            <p>Renacimientos: <span id="renacimiento">0</span></p>
+			<p>Autorenacimientos: <span id="autorena">0</span></p>
+            <button onclick="cerrarEstadisticas()" id="closeButtonII">Cerrar</button>
+        </div>
+    </div>
+	
+	<div id="mejorasOverlay">
+		<div id="mejorasBanner">
+        <p>Mejoras</p>
+		<p id="tokenCounter">Tokens: 0</p>
+		<p id="clickTCounter">Clicks: 0 / 50</p>
+		<button class="buttonToken" id="bt1" onclick="itemToken1()">Multiplicador + 1 | Costo: 500 tokens</button>
+		<!--<button id="buttonToken" onclick="buyItem(2)">Comprar Item 2 (Costo: 10 tokens)</button>-->
+        <button onclick="cerrarMejoras()" id="closeButtonMejoras">Cerrar</button>
+		</div>
+	</div>
+
+    <script>
+let contador = 0;
+let ganancia = 1;
+let clickPorSegundo = 0;
+let renacimientos = 0; // Contador de renacimientos
+let multiplicador = 1; // Multiplicador base de ganancia
+let autorenacimientos = 0;
+let clickCount = 0; // Contador de clics
+let tokens = 0; // Contador de tokens
+
+
+const preciosOriginales = [50, 400, 1500, 5500, 10000, 20000, 45000, 80000, 150000, 10000000];
+
+// Actualizar el contador en pantalla sin decimales
+function actualizarContador() {
+    document.getElementById('counter').textContent = Math.floor(contador); // Mostrar solo la parte entera
+}
+
+// Incrementar el contador cuando se hace clic en la galleta
+function clickGalleta() {
+    contador += ganancia * multiplicador; // Ganancia afectada por el multiplicador
+    actualizarContador();
+    generarGalleta(); // Generar una animación de galleta al hacer clic
+    
+    // Aquí solo sumamos 1 al contador de clics para tokens
+    clickCount++;
+    actualizarClicks();
+
+    // Cada 50 clics, otorgar un token
+    if (clickCount % 50 === 0) {
+        tokens++;
+        actualizarTokens();
+    }
+}
+
+// Actualiza el contador de clics en pantalla (opcional)
+function actualizarClicks() {
+    const clickTCounter = document.getElementById('clickTCounter');
+    clickTCounter.textContent = `Clicks: ${clickCount} / 50`;
+}
+
+// Actualiza el contador de tokens en pantalla
+function actualizarTokens() {
+    const tokenCounter = document.getElementById('tokenCounter');
+	const clickTCounter = document.getElementById('clickTCounter');
+    clickTCounter.textContent = `Clicks: 0 / 50`;
+    tokenCounter.textContent = `Tokens: ${tokens}`;
+	clickCount = 0;
+}
+
+// Función para generar las pequeñas galletas animadas
+function generarGalleta() {
+    const galleta = document.createElement('img');
+    const clickerSection = document.querySelector('.clicker-section');
+    const anchoSeccion = clickerSection.offsetWidth;
+
+    galleta.src = 'galleta.png';
+    galleta.classList.add('galleta');
+    galleta.style.position = 'absolute';
+    galleta.style.zIndex = '0'; // Asegurarse de que quede detrás de la galleta principal
+    galleta.style.top = '0';
+    galleta.style.left = `${Math.random() * (anchoSeccion - 100)}px`;
+    galleta.style.width = '50px';
+    galleta.style.height = '50px';
+    galleta.style.animation = 'caer 2s linear forwards';
+
+    clickerSection.appendChild(galleta);
+
+    galleta.addEventListener('animationend', () => {
+        galleta.remove();
+    });
+}
+
+// Actualizar las estadísticas en la pantalla
+function actualizarEstadisticas() {
+    document.getElementById('clicksPorClick').textContent = Math.trunc(ganancia * multiplicador); // CPC truncado
+    document.getElementById('clicksPorSegundo').textContent = Math.trunc(clickPorSegundo * multiplicador); // CPS truncado
+    document.getElementById('renacimiento').textContent = renacimientos;
+	document.getElementById('autorena').textContent = autorenacimientos;
+    document.getElementById('multiplicador').textContent = multiplicador.toFixed(1); // Multiplicador con un decimal
+}
+
+function mostrarEstadisticas() {
+    const estadisticas = document.getElementById('estadisticas');
+    estadisticas.style.display = 'flex';
+}
+
+function cerrarEstadisticas() {
+    const estadisticas = document.getElementById('estadisticas');
+    estadisticas.style.display = 'none';
+}
+
+function mostrarMejoras() {
+    const mejoras = document.getElementById('mejorasOverlay');
+    mejoras.style.display = 'flex';
+}
+
+function cerrarMejoras() {
+    const mejoras = document.getElementById('mejorasOverlay');
+    mejoras.style.display = 'none';
+}
+
+// Botones y sus mejoras
+const botones = [
+    { id: 'boton1', precio: 50, mejora: { tipo: 'click', cantidad: 1 } },
+    { id: 'boton2', precio: 400, mejora: { tipo: 'auto', cantidad: 1 } },
+    { id: 'boton3', precio: 1500, mejora: { tipo: 'click', cantidad: 5 } },
+    { id: 'boton4', precio: 5500, mejora: { tipo: 'auto', cantidad: 5 } },
+    { id: 'boton5', precio: 10000, mejora: { tipo: 'click', cantidad: 10 } },
+    { id: 'boton6', precio: 20000, mejora: { tipo: 'auto', cantidad: 10 } },
+    { id: 'boton7', precio: 45000, mejora: { tipo: 'click', cantidad: 50 } },
+    { id: 'boton8', precio: 80000, mejora: { tipo: 'auto', cantidad: 50 } },
+    { id: 'boton9', precio: 150000, mejora: { tipo: 'click', cantidad: 100 } },
+    { 
+        id: 'boton10', 
+        precio: 10000000, // Precio inicial de 1,000,000 clicks
+        mejora: { tipo: 'renacimiento', cantidad: 1 } // Otorga 1 Renacimiento
+    },
+];
+
+
+
+function defaultRenacimientos() {
+    botones.forEach((boton, index) => {
+        boton.precio = preciosOriginales[index];
+        const elementoBoton = document.getElementById(boton.id);
+        elementoBoton.textContent = `${elementoBoton.textContent.split(':')[0]}: ${boton.precio} clicks`;
+    });
+
+    actualizarEstadisticas();
+    actualizarContador();
+}
+
+// Configurar eventos de los botones
+botones.forEach(boton => {
+    const elementoBoton = document.getElementById(boton.id);
+    elementoBoton.addEventListener('click', () => {
+        if (contador >= boton.precio) {
+            contador -= boton.precio;
+            actualizarContador();
+
+            if (boton.mejora.tipo === 'click') {
+                ganancia += boton.mejora.cantidad;
+            } else if (boton.mejora.tipo === 'auto') {
+                clickPorSegundo += boton.mejora.cantidad;
+            } else if (boton.mejora.tipo === 'renacimiento') {
+                incrementarRenacimientos(); // Incrementar renacimientos
+            }
+
+            actualizarEstadisticas();
+
+            boton.precio = Math.ceil(boton.precio * 1.1); // Aumentar el precio un 10%
+            elementoBoton.textContent = `${elementoBoton.textContent.split(':')[0]}: ${boton.precio} clicks`;
+        } else {
+            alert('No tienes suficientes clicks para comprar esta mejora.');
+        }
+    });
+});
+
+// Incrementar el número de renacimientos
+function incrementarRenacimientos() {
+    renacimientos++;
+    multiplicador += 0.1; // Aumentar el multiplicador un 10% por renacimiento
+    contador = 0; // Reinicia el contador de clics
+    ganancia = 1; // Reinicia la ganancia por clic base
+    clickPorSegundo = 0; // Reinicia la ganancia por segundo base
+    actualizarEstadisticas();
+    actualizarContador();
+	defaultRenacimientos();
+}
+
+function masUnAR() {
+	if (renacimientos > 69 && contador > 99999999){
+	autorenacimientos++
+	renacimientos = 0
+	multiplicador = 1; 
+    contador = 0; // Reinicia el contador de clics
+    ganancia = 1; // Reinicia la ganancia por clic base
+    clickPorSegundo = 0; // Reinicia la ganancia por segundo base
+    actualizarEstadisticas();
+    actualizarContador();
+	defaultRenacimientos();
+	} else {
+	alert('No tienes suficientes clicks para comprar esta mejora.');
+	}
+}
+
+// Actualizar contador de forma automática con la ganancia por segundo
+setInterval(() => {
+    contador += clickPorSegundo * multiplicador; // Aplicar multiplicador también a CPS
+    actualizarContador();
+}, 1000);
+
+setInterval(() => {
+    if (autorenacimientos > 0){
+	renacimientos = renacimientos + autorenacimientos;
+	multiplicador += 0.1 * autorenacimientos;	// Aplicar multiplicador también a CPS
+	actualizarEstadisticas();
+    actualizarContador();
+	}
+}, 60000);
+
+function guardarProgreso() {
+    const progreso = {
+        contador: contador,
+        ganancia: ganancia,
+        clickPorSegundo: clickPorSegundo,
+        renacimientos: renacimientos,
+        multiplicador: multiplicador,
+        autorenacimientos: autorenacimientos,
+		clickCount: clickCount,
+		tokens: tokens,
+		multiplicadorTokens: multiplicadorTokens,
+        precios: botones.map(boton => boton.precio)
+    };
+
+    localStorage.setItem('progresoJuego', JSON.stringify(progreso));
+}
+
+function cargarProgreso() {
+    const progresoGuardado = localStorage.getItem('progresoJuego');
+
+    if (progresoGuardado) {
+        const progreso = JSON.parse(progresoGuardado);
+
+        contador = progreso.contador;
+        ganancia = progreso.ganancia;
+        clickPorSegundo = progreso.clickPorSegundo;
+        renacimientos = progreso.renacimientos;
+        multiplicador = progreso.multiplicador;
+        autorenacimientos = progreso.autorenacimientos;
+        clickCount = progreso.clickCount; // Corregir asignación
+        tokens = progreso.tokens; // Corregir asignación
+		multiplicadorTokens = progreso.multiplicadorTokens;
+
+        // Actualizar precios de botones
+        botones.forEach((boton, index) => {
+            boton.precio = progreso.precios[index];
+            const elementoBoton = document.getElementById(boton.id);
+            elementoBoton.textContent = `${elementoBoton.textContent.split(':')[0]}: ${boton.precio} clicks`;
+        });
+
+        actualizarContador();
+        actualizarEstadisticas();
+        actualizarClicks(); // Actualizar el contador de clics en la pantalla
+        actualizarTokens(); // Actualizar el contador de tokens en la pantalla
+    }
+}
+
+function itemToken1(){
+	if (tokens > 499){
+		multiplicador++;
+		tokens = tokens - 500;
+		actualizarContador();
+        actualizarEstadisticas();
+        actualizarClicks(); // Actualizar el contador de clics en la pantalla
+        actualizarTokens(); // Actualizar el contador de tokens en la pantalla
+	} else {
+		alert('No tienes suficientes tokens para comprar esta mejora.');
+	}
+}
+
+// Asociar el evento de clic en la galleta para incrementar el contador
+document.getElementById('cookieImage').onclick = null;
+document.getElementById('cookieImage').addEventListener('click', clickGalleta);
+
+
+// Animación de las galletas al caer
+document.styleSheets[0].insertRule(`
+    @keyframes caer {
+        to {
+            transform: translateY(500px); /* Ajuste de caída */
+            opacity: 0;
+        }
+    }
+`, 0);
+
+
+
+    window.addEventListener('DOMContentLoaded', cargarProgreso);
+    window.addEventListener('beforeunload', guardarProgreso);
+	
+</script>
+</body>
+</html>
+
+
